@@ -38,6 +38,12 @@ terraform init
 terraform apply -var project="<YOUR_GCP_ProjectID>"
 ```
 
+## Cleaning up
+
+Deleting clusters with Kubernetes services installed can leave behind orphaned resources within your Google
+Cloud project. We provided [destroy.sh](destroy.sh) as a handy script for cleaning up your resources by deleting the
+Helm installation first. It assumes you have [Helm v2.x](https://v2.helm.sh/docs/) installed in your path. 
+
 [tf]: https://www.terraform.io/
 [agones]: https://agones.dev/
 [citadel]: https://istio.io/docs/ops/deployment/architecture/#citadel
