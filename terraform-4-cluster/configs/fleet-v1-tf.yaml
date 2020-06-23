@@ -16,6 +16,8 @@
 # A singular Fleet "spec" to be applied to a GCGS Config
 # See: https://agones.dev/site/docs/reference/fleet/ for reference
 #
+# Formatted as needed for Terrafrom
+#
 
 replicas: 2
 template:
