@@ -30,6 +30,9 @@ You may need to increase your
 
 ## Running the example
 
+Before running the example, make sure you have applied the IAM permission changes outlined in
+[Registering a cluster](https://cloud.google.com/game-servers/docs/how-to/registering-cluster#registering_a_cluster).
+
 To create the example in your project:
 
 ```shell script
