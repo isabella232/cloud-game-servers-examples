@@ -41,6 +41,19 @@ terraform init
 terraform apply -var project="<YOUR_GCP_ProjectID>"
 ```
 
+## Multi-cluster Allocation
+
+We're still working out how to configure the certificate authentication part of Multi-cluster allocation to Terraform.
+
+In the meantime, `gen-certs.sh` will create and apply the requisite certificates, as well as save them locally for
+authentication against the [allocation service](https://agones.dev/site/docs/advanced/allocator-service/).
+
+`allocate.sh` also provides a convenience script for passing those certificates to the 
+[allocator sample client](https://agones.dev/site/docs/advanced/multi-cluster-allocation/#allocate-multi-cluster). To
+use this script export the environment variable `ALLOCATION_PATH` to point to the 
+[allocator sample client](https://agones.dev/site/docs/advanced/multi-cluster-allocation/#allocate-multi-cluster)
+directory.
+
 [tf]: https://www.terraform.io/
 [agones]: https://agones.dev/
 [citadel]: https://istio.io/docs/ops/deployment/architecture/#citadel
