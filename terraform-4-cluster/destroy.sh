@@ -22,27 +22,17 @@ set -x
 # such as load balancers, here's a short script to delete helm installations
 # before deleting the infrastructure.
 #
-
-# Assuming Helm 2.x at this point, but run upgrade in case local version isn't the same as the Terraform version
-upgrade_helm() {
-  gcloud container clusters get-credentials $1 --zone $2
-  helm init --upgrade
-}
-
+# Assuming Helm 3.x at this point, but run upgrade in case local version isn't the same as the Terraform version
 delete_helm() {
   gcloud container clusters get-credentials $1 --zone $2
-  helm delete --purge agones
+  helm uninstall --purge agones
 }
-
-gcloud container clusters list --format="value(name,zone)" | grep game-cluster | while read -r line ; do
-    upgrade_helm $line
-done
-
-echo "Helm upgrade complete, waiting for a minute to finalise..."
-sleep 60
 
 gcloud container clusters list --format="value(name,zone)" | grep game-cluster | while read -r line ; do
     delete_helm $line
 done
 
-terraform destroy
+echo "Helm delete complete, waiting for a minute to finalise..."
+sleep 60
+
+terraform destroy --auto-approve

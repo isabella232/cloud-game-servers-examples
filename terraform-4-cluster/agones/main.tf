@@ -22,7 +22,7 @@ terraform {
 
 // Create a GKE cluster with the appropriate structure
 module "agones_cluster" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/gke/?ref=release-1.6.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/gke/?ref=release-1.7.0"
 
   cluster = {
     "name"             = var.name
@@ -36,9 +36,9 @@ module "agones_cluster" {
 
 // Install Agones via Helm
 module "helm_agones" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm/?ref=release-1.6.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm/?ref=release-1.7.0"
 
-  agones_version         = "1.6.0"
+  agones_version         = "1.7.0"
   values_file            = ""
   chart                  = "agones"
   host                   = module.agones_cluster.host
