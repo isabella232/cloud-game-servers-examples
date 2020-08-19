@@ -51,7 +51,7 @@ resource "google_game_services_realm" "eu" {
 /* US Region */
 
 module "game-cluster-us-1" {
-  source  = "./agones-tf"
+  source  = "./agones-cluster"
   project = var.project
 
   name  = "game-cluster-us-1"
@@ -60,7 +60,7 @@ module "game-cluster-us-1" {
 }
 
 module "game-cluster-us-2" {
-  source  = "./agones-tf"
+  source  = "./agones-cluster"
   project = var.project
 
   name  = "game-cluster-us-2"
@@ -71,7 +71,7 @@ module "game-cluster-us-2" {
 /* EU Region */
 
 module "game-cluster-eu-1" {
-  source  = "./agones-tf"
+  source  = "./agones-cluster"
   project = var.project
 
   name  = "game-cluster-eu-1"
@@ -80,7 +80,7 @@ module "game-cluster-eu-1" {
 }
 
 module "game-cluster-eu-2" {
-  source  = "./agones-tf"
+  source  = "./agones-cluster"
   project = var.project
 
   name  = "game-cluster-eu-2"
