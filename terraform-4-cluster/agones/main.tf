@@ -15,8 +15,8 @@
 
 terraform {
   required_providers {
-    google      = "~> 3.13"
-    google-beta = "~> 3.13"
+    google      = "~> 3.35"
+    google-beta = "~> 3.35"
   }
 }
 
@@ -94,7 +94,6 @@ resource "helm_release" "cert_manager" {
 
 // Register the cluster with the realm
 resource "google_game_services_game_server_cluster" "registry" {
-  provider   = google-beta
   project    = var.project
   depends_on = [module.agones_cluster, module.helm_agones, module.citadel, helm_release.cert_manager]
 
