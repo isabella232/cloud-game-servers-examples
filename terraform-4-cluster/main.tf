@@ -16,11 +16,11 @@
 // terraform apply -var project="<YOUR_GCP_ProjectID>"
 
 provider "google" {
-  version = "~> 3.13"
+  version = "~> 3.35"
 }
 
 provider "google-beta" {
-  version = "~> 3.13"
+  version = "~> 3.35"
 }
 
 variable "project" {
@@ -30,7 +30,6 @@ variable "project" {
 /* Realms */
 
 resource "google_game_services_realm" "us" {
-  provider = google-beta
   project  = var.project
 
   realm_id  = "united-states"
@@ -41,7 +40,6 @@ resource "google_game_services_realm" "us" {
 }
 
 resource "google_game_services_realm" "eu" {
-  provider = google-beta
   project  = var.project
 
   realm_id    = "europe"
@@ -93,7 +91,6 @@ module "game-cluster-eu-2" {
 /* Configurations and Deployments */
 
 resource "google_game_services_game_server_deployment" "stk" {
-  provider = google-beta
   project  = var.project
 
   deployment_id = "stk"
@@ -101,7 +98,6 @@ resource "google_game_services_game_server_deployment" "stk" {
 }
 
 resource "google_game_services_game_server_config" "v1" {
-  provider = google-beta
   project  = var.project
 
   config_id     = "v1"
@@ -117,7 +113,6 @@ resource "google_game_services_game_server_config" "v1" {
 /* Roll out the Deployment */
 
 resource "google_game_services_game_server_deployment_rollout" "default" {
-  provider = google-beta
   project  = var.project
 
   deployment_id              = google_game_services_game_server_deployment.stk.deployment_id
