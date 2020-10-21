@@ -37,7 +37,7 @@ server_cert() {
   #!/bin/bash
   # Create a self-signed ClusterIssuer
 cat <<EOF | kubectl apply -f -
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: ClusterIssuer
 metadata:
   name: selfsigned
@@ -49,7 +49,7 @@ EOF
 
   # Create a Certificate with IP for the allocator-tls secret
 cat <<EOF | kubectl apply -f -
-apiVersion: cert-manager.io/v1alpha2
+apiVersion: cert-manager.io/v1
 kind: Certificate
 metadata:
   name: allocator-selfsigned-cert
@@ -67,10 +67,13 @@ EOF
   # Optional: Store the secret ca.crt in a file to be used by the client for the server authentication
   TLS_CA_FILE=$CERT_FOLDER/ca.crt
   TLS_CA_VALUE=`kubectl get secret allocator-tls -n agones-system -ojsonpath='{.data.ca\.crt}'`
-  echo ${TLS_CA_VALUE} | base64 -d > ${TLS_CA_FILE}
 
-  # In case of MacOS
-  # echo ${TLS_CA_VALUE} | base64 -D > ${TLS_CA_FILE}
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    echo ${TLS_CA_VALUE} | base64 -D > ${TLS_CA_FILE}
+  else
+    echo ${TLS_CA_VALUE} | base64 -d > ${TLS_CA_FILE}
+  fi
 
   # Add ca.crt to the allocator-tls-ca Secret
   kubectl get secret allocator-tls-ca -o json -n agones-system | jq '.data["tls-ca.crt"]="'${TLS_CA_VALUE}'"' | kubectl apply -f -
@@ -82,12 +85,14 @@ client_cert() {
   KEY_FILE=$CERT_FOLDER/client.key
   CERT_FILE=$CERT_FOLDER/client.crt
 
-  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${KEY_FILE} -out ${CERT_FILE} -subj "/C=/ST=/L=/O=/OU=/CN="
+  openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ${KEY_FILE} -out ${CERT_FILE} -subj "/CN=client"
 
-  CERT_FILE_VALUE=`cat ${CERT_FILE} | base64 -w 0`
-
-  # In case of MacOS
-  # CERT_FILE_VALUE=`cat ${CERT_FILE} | base64`
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    # Mac OSX
+    CERT_FILE_VALUE=`cat ${CERT_FILE} | base64`
+  else
+    CERT_FILE_VALUE=`cat ${CERT_FILE} | base64 -w 0`
+  fi
 
   # white-list client certificate
   kubectl get secret allocator-client-ca -o json -n agones-system | jq '.data["client_trial.crt"]="'${CERT_FILE_VALUE}'"' | kubectl apply -f -
@@ -97,5 +102,9 @@ gcloud container clusters list --format="value(name,zone)" | grep game-cluster |
     cluster_setup $line
     server_cert $line
     client_cert $line
-    kubectl get pods -n agones-system -o=name | grep agones-allocator | xargs kubectl delete -n agones-system
 done
+
+# The following commands are used to trigger Game Servers reconciliation of clusters within realm, instead of waiting for an hour for the changes to have effect. 
+echo " The update realm is to trigger reconciliation between clusters."
+gcloud game servers realms update united-states --update-labels=usage=testing --location=global --no-dry-run >/dev/null
+gcloud game servers realms update europe --update-labels=usage=testing --location=global --no-dry-run >/dev/null
