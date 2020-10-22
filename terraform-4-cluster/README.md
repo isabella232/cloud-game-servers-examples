@@ -54,6 +54,9 @@ use this script export the environment variable `ALLOCATION_PATH` to point to th
 [allocator sample client](https://agones.dev/site/docs/advanced/multi-cluster-allocation/#allocate-multi-cluster)
 directory.
 
+If there is a failure while running `allocate.sh` give it a few minutes before running the script again.
+The wait is for Game Servers to synchronize resources across clusters.
+
 ## Cleaning up
 
 ```shell script
