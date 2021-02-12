@@ -22,7 +22,7 @@ terraform {
 
 // Create a GKE cluster with the appropriate structure
 module "agones_cluster" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/gke/?ref=release-1.9.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/gke/?ref=release-1.12.0"
 
   cluster = {
     "name"             = var.name
@@ -36,9 +36,9 @@ module "agones_cluster" {
 
 // Install Agones via Helm
 module "helm_agones" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm3/?ref=release-1.9.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm3/?ref=release-1.12.0"
 
-  agones_version         = "1.9.0"
+  agones_version         = "1.12.0"
   values_file            = ""
   chart                  = "agones"
   host                   = module.agones_cluster.host
@@ -69,17 +69,10 @@ provider "helm" {
   }
 }
 
-data "helm_repository" "jetstack" {
-  name = "jetstack"
-  url  = "https://charts.jetstack.io"
-
-  depends_on = [module.helm_agones]
-}
-
 resource "helm_release" "cert_manager" {
   name = "cert-manager"
   force_update = "true"
-  repository = data.helm_repository.jetstack.metadata.0.name
+  repository = "https://charts.jetstack.io"
   chart = "cert-manager"
   version = "v1.0.3"
   timeout = 420
