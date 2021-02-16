@@ -28,6 +28,10 @@ You may need to increase your
 [Google Cloud Project Quotas for CPUs and External IP addresses](https://console.cloud.google.com/iam-admin/quotas), as this example creates
 4 clusters, each with 6 n1-standard-4 nodes - 2 in europe-west4 and 2 in us-central1.
 
+## Terraform version support
+
+This example was built using Terraform 0.12, and has not yet been updated to 0.13 and above.
+
 ## Running the example
 
 Before running the example, make sure you have applied the IAM permission changes outlined in
