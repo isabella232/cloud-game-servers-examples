@@ -1,4 +1,4 @@
-// Copyright 2020 Google LLC All Rights Reserved.
+// Copyright 2021 Google LLC All Rights Reserved.
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -15,12 +15,23 @@
 // Run:
 // terraform apply -var project="<YOUR_GCP_ProjectID>"
 
+terraform {
+  required_providers {
+    google = {
+      source = "google"
+      version = "~> 3.35"
+    }
+    google-beta = {
+      source = "google-beta"
+      version = "~> 3.35"
+    }
+  }
+}
+
 provider "google" {
-  version = "~> 3.35"
 }
 
 provider "google-beta" {
-  version = "~> 3.35"
 }
 
 variable "project" {
