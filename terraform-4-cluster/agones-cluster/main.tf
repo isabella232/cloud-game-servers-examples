@@ -17,6 +17,7 @@ terraform {
   required_providers {
     google      = "~> 3.35"
     google-beta = "~> 3.35"
+    helm        = "~> 1.2"
   }
 }
 
@@ -36,7 +37,7 @@ module "agones_cluster" {
 
 // Install Agones via Helm
 module "helm_agones" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm3/?ref=release-1.12.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm3/?ref=release-1.13.0"
 
   agones_version         = "1.12.0"
   values_file            = ""
@@ -57,7 +58,6 @@ module "citadel" {
 
 // Install cert-manager.io
 provider "helm" {
-  version = "~> 1.2"
 
   debug           = true
 
