@@ -15,7 +15,6 @@
 terraform {
   required_providers {
     google      = "~> 3.84"
-    google-beta = "~> 3.84"
     helm        = "~> 1.2"
   }
 }
