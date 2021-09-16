@@ -15,12 +15,16 @@
 // Run:
 // terraform apply -var project="<YOUR_GCP_ProjectID>"
 
-provider "google" {
-  version = "~> 3.35"
+terraform {
+  required_providers {
+    google = {
+      source = "google"
+      version = "~> 3.84"
+    }
+  }
 }
 
-provider "google-beta" {
-  version = "~> 3.35"
+provider "google" {
 }
 
 variable "project" {

@@ -17,8 +17,13 @@ Module to install Citadel (https://istio.io/docs/ops/deployment/architecture/#ci
 To secure cross-cluster communication between Multi Cluster Allocation endpoints
 */
 
+terraform {
+  required_providers {
+    kubernetes = "~> 2.5.0"
+  }
+}
+
 provider "kubernetes" {
-  load_config_file       = false
   host                   = var.host
   token                  = var.token
   cluster_ca_certificate = var.cluster_ca_certificate
@@ -160,7 +165,7 @@ resource "kubernetes_deployment" "istio_citadel" {
           }
 
           resources {
-            requests {
+            requests = {
               cpu = "10m"
             }
           }

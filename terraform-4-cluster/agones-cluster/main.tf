@@ -12,17 +12,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 terraform {
   required_providers {
-    google      = "~> 3.35"
-    google-beta = "~> 3.35"
+    google      = "~> 3.84"
+    helm        = "~> 1.2"
   }
 }
 
 // Create a GKE cluster with the appropriate structure
 module "agones_cluster" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/gke/?ref=release-1.12.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/gke/?ref=release-1.16.0"
 
   cluster = {
     "name"             = var.name
@@ -36,9 +35,9 @@ module "agones_cluster" {
 
 // Install Agones via Helm
 module "helm_agones" {
-  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm3/?ref=release-1.12.0"
+  source = "git::https://github.com/googleforgames/agones.git//install/terraform/modules/helm3/?ref=release-1.16.0"
 
-  agones_version         = "1.12.0"
+  agones_version         = "1.16.0"
   values_file            = ""
   chart                  = "agones"
   host                   = module.agones_cluster.host
@@ -57,12 +56,10 @@ module "citadel" {
 
 // Install cert-manager.io
 provider "helm" {
-  version = "~> 1.2"
 
-  debug           = true
+  debug = true
 
   kubernetes {
-    load_config_file       = false
     host                   = module.agones_cluster.host
     token                  = module.agones_cluster.token
     cluster_ca_certificate = module.agones_cluster.cluster_ca_certificate
